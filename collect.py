@@ -7,10 +7,10 @@ Writes voyages.json (for the web page) and state.json (memory between runs).
 """
 import asyncio, calendar, json, math, os, re, time
 
-LISTEN = int(os.environ.get("LISTEN_SECONDS", "100"))
+LISTEN = int(os.environ.get("LISTEN_SECONDS", "420"))
 MAXAGE = 5 * 86400                      # forget an Oman departure after 5 days
 BOX = [[[15.0, 51.5], [27.5, 60.5]]]    # [lat, lon] corners: Salalah to Hormuz
-RUN = {"msgs": 0, "heard": set()}       # this run's counters, shown on the page
+RUN = {"msgs": 0, "heard": set(), "zones": {}, "ext": [90.0, -90.0, 180.0, -180.0]}       # this run's counters, shown on the page
 
 # country, port, lat, lon, radius km. Approximate: adjust to taste.
 PORTS = [
@@ -136,6 +136,22 @@ def handle(S, m, now):
             S["done"].append(v)
 
 
+def track(m):
+    """Coverage diagnostics only: which port areas and lat/lon range this run heard."""
+    p = (m.get("Message") or {}).get("PositionReport")
+    mmsi = (m.get("MetaData") or {}).get("MMSI")
+    if not p or not mmsi:
+        return
+    lat, lon = p.get("Latitude"), p.get("Longitude")
+    if lat is None or lon is None or abs(lat) > 90 or abs(lon) > 180:
+        return
+    e = RUN["ext"]
+    e[0], e[1], e[2], e[3] = min(e[0], lat), max(e[1], lat), min(e[2], lon), max(e[3], lon)
+    z = zone(lat, lon)
+    if z:
+        RUN["zones"].setdefault(z[1], set()).add(mmsi)
+
+
 async def listen(S):
     import websockets
     end = time.time() + LISTEN
@@ -152,6 +168,7 @@ async def listen(S):
             mm = (m.get("MetaData") or {}).get("MMSI")
             if mm:
                 RUN["heard"].add(mm)
+            track(m)
             handle(S, m, time.time())
 
 
@@ -186,8 +203,11 @@ def export(S, now):
         if v.get("type") and v.get("to"):
             out.append(dict(v, dep=int(v["dep"] * 1000), arr=int(v["arr"] * 1000) if v.get("arr") else None))
     out.sort(key=lambda v: v["dep"], reverse=True)
+    ext = RUN["ext"]
     stats = {"msgs": RUN["msgs"], "ships": len(RUN["heard"]), "om": len(S["om"]),
-             "left": sum(1 for e in S["om"].values() if e[2])}
+             "left": sum(1 for e in S["om"].values() if e[2]),
+             "ports": {k: len(v) for k, v in sorted(RUN["zones"].items())},
+             "box": [round(x, 1) for x in ext] if ext[0] <= ext[1] else None}
     with open("voyages.json", "w") as f:
         json.dump({"updated": int(now * 1000), "stats": stats, "voyages": out}, f)
     return len(out)
