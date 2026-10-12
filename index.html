@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Oman to UAE Ships</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;500;600;700&display=swap">
+<style>
+:root{--bg:#eef3f3;--pane:#fff;--ink:#0c2530;--mute:#566b75;--line:#d3dfe0;--acc:#0f6b78;--accbg:#d8eceb;--wn:#8a5a00;--wnbg:#f8ecd0;--mt:#46606a;--mtbg:#e1e9ea;--on:#fff;--bad:#b3261e;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1a20;--pane:#122832;--ink:#e4eff0;--mute:#8fa8b0;--line:#23404a;--acc:#4fc1cf;--accbg:#12353d;--wn:#e6b552;--wnbg:#3a2d10;--mt:#9db6be;--mtbg:#1d3640;--on:#06232a;--bad:#ff8f85}}
+:root[data-theme="dark"]{--bg:#0b1a20;--pane:#122832;--ink:#e4eff0;--mute:#8fa8b0;--line:#23404a;--acc:#4fc1cf;--accbg:#12353d;--wn:#e6b552;--wnbg:#3a2d10;--mt:#9db6be;--mtbg:#1d3640;--on:#06232a;--bad:#ff8f85}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 "Barlow Semi Condensed",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:16px 14px 48px}
+h1{font-size:30px;line-height:1.1;font-weight:700;margin:0 0 4px;letter-spacing:-.01em}
+.sub{color:var(--mute);margin:0 0 12px}
+.note{border-left:4px solid var(--wn);background:var(--wnbg);color:var(--ink);padding:9px 12px;margin-bottom:14px;font-size:15px}
+.note.ok{border-color:var(--acc);background:var(--accbg)}
+button,select,input,textarea{font:inherit;color:var(--ink)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.row{display:flex;gap:8px;margin-bottom:8px}
+select,input[type=search]{flex:1;min-width:0;padding:10px;border:1px solid var(--line);border-radius:4px;background:var(--pane)}
+.tabs{display:flex;border-bottom:1px solid var(--line);margin:12px 0 10px;overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:9px 13px;color:var(--mute);font-weight:600;cursor:pointer;white-space:nowrap}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--acc)}
+.tg{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px}
+.tg button{border:1px solid var(--line);background:var(--pane);border-radius:4px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.tg button.on{background:var(--acc);border-color:var(--acc);color:var(--on)}
+h2{font-size:17px;font-weight:600;margin:18px 0 8px}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:4px;background:var(--pane)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:8px 10px;text-align:center;border-bottom:1px solid var(--line);white-space:nowrap;font-weight:500}
+th{color:var(--mute)}
+tr th:first-child{text-align:left;color:var(--ink);font-weight:600}
+tr:last-child th,tr:last-child td{border-bottom:0}
+td.c{cursor:pointer;min-width:46px;color:var(--mute)}
+td.has{color:var(--acc);font-weight:700}
+td.on{background:var(--acc);color:var(--on)}
+.v{padding:12px 0;border-bottom:1px solid var(--line)}
+.r1{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.r1 b{font-size:19px;font-weight:700}
+.st{font-size:14px;font-weight:600;padding:1px 8px;border-radius:3px;white-space:nowrap}
+.st.Underway{background:var(--accbg);color:var(--acc)}.st.Scheduled{background:var(--wnbg);color:var(--wn)}.st.Arrived{background:var(--mtbg);color:var(--mt)}
+.meta{color:var(--mute);font-size:14px}
+.lane{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;margin:9px 0 5px;font-weight:600}
+.ln{position:relative;height:2px;background:var(--line)}
+.ln u{position:absolute;left:0;top:0;bottom:0;background:var(--acc)}
+.ln i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--acc)}
+.ln.Scheduled i{background:var(--bg);border:2px solid var(--wn)}
+.ln.Arrived u,.ln.Arrived i{background:var(--mt)}
+.times{display:flex;justify-content:space-between;gap:8px;font-size:14px;color:var(--mute)}
+.empty{padding:26px 0;text-align:center;color:var(--mute)}
+details{margin-top:22px;border:1px solid var(--line);border-radius:4px;background:var(--pane);padding:10px 12px}
+summary{cursor:pointer;font-weight:600}
+textarea{width:100%;min-height:90px;margin:8px 0;padding:9px;border:1px solid var(--line);border-radius:4px;background:var(--bg);font:13px ui-monospace,Menlo,monospace}
+.btn{border:0;border-radius:4px;background:var(--acc);color:var(--on);padding:9px 14px;font-weight:600;cursor:pointer}
+.btn.g{background:var(--mtbg);color:var(--ink)}
+.hint{color:var(--mute);font-size:14px;margin:6px 0}
+#msg{margin-top:8px;font-size:15px}#msg.err{color:var(--bad)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Oman to UAE ships</h1>
+<p class="sub" id="sub"></p>
+<div class="note" id="src"></div>
+<div class="row"><select id="fs" aria-label="Origin port in Oman"></select><select id="ts" aria-label="Destination port in the UAE"></select></div>
+<div class="row"><input type="search" id="q" placeholder="Search vessel name or IMO"></div>
+<div class="tabs" id="tabs"></div>
+<div class="tg" id="tg"></div>
+<h2>Lanes (tap a count to filter)</h2>
+<div class="scroll"><table id="mx"></table></div>
+<h2 id="lh">Voyages</h2>
+<div id="list"></div>
+<details>
+<summary>Import real voyage data</summary>
+<p class="hint">Export voyages or port calls from your AIS provider (MarineTraffic, VesselFinder, Datalastic and similar) and load them here. Include a header row. Columns, in any order: name, type, flag, imo, from, to, departed, arrived (or eta), status. Port names or UN/LOCODEs such as OMSOH and AEJEA both work. CSV, tab-separated or a JSON array.</p>
+<input type="file" id="file" accept=".csv,.tsv,.txt,.json">
+<textarea id="paste" placeholder="Or paste CSV / JSON here"></textarea>
+<button class="btn" id="load">Load data</button> <button class="btn g" id="reset">Back to sample data</button>
+<div id="msg"></div>
+</details>
+<p class="hint">Oman origins: Sohar, Salalah, Duqm, Muscat, Sur, Khasab, Shinas. UAE destinations: Jebel Ali, Khalifa Port, Abu Dhabi, Fujairah, Khor Fakkan, Sharjah, Ras Al Khaimah, Dubai, Ruwais. Fishing, yacht and naval vessels are dropped on import. AIS destinations are typed by crews, so cross-check against port-call records.</p>
+</div>
+<script>
+(()=>{
+const $=i=>document.getElementById(i),H=36e5,KEY='oman-uae-ships-v1';
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const OM=[[/sohar|omsoh/i,'Sohar'],[/salalah|omsll/i,'Salalah'],[/duqm|omdqm/i,'Duqm'],[/muscat|mutrah|matrah|qaboos|ommct|fahal/i,'Muscat'],[/\bsur\b|omsur|qalhat/i,'Sur'],[/khasab|omkhs/i,'Khasab'],[/shinas/i,'Shinas']];
+const AE=[[/jebel\s*ali|aejea/i,'Jebel Ali'],[/khalifa/i,'Khalifa Port'],[/abu\s*dhabi|zayed|aeauh/i,'Abu Dhabi'],[/fujairah|aefjr/i,'Fujairah'],[/khor\s*fakkan|aeklf/i,'Khor Fakkan'],[/sharjah|hamriyah|aeshj/i,'Sharjah'],[/ras\s*al\s*khaimah|\brak\b|aerkt|saqr/i,'Ras Al Khaimah'],[/dubai|rashid|aedxb/i,'Dubai'],[/ruwais/i,'Ruwais']];
+const find=(L,s)=>{s=String(s||'');for(const[r,n]of L)if(r.test(s))return n;return null};
+const SKIP=/fish|yacht|pleasure|sail|military|naval|patrol|pilot|rescue/i;
+const cat=t=>{t=String(t||'');if(SKIP.test(t))return null;
+if(/lng|lpg|gas/i.test(t))return'Gas';if(/contain/i.test(t))return'Container';if(/tank|crude|chemical|oil|product/i.test(t))return'Tanker';if(/bulk/i.test(t))return'Bulk';if(/ro-?ro|vehicle|car\s*carrier/i.test(t))return'Ro-Ro';if(/passenger|ferry|cruise/i.test(t))return'Passenger';if(/general|cargo|multi|dhow|reefer/i.test(t))return'General cargo';return'Other'};
+const pd=x=>{if(x==null||x==='')return null;if(typeof x=='number')return x>1e12?x:x*1e3;const t=Date.parse(String(x).trim().replace(/^(\d{4}-\d\d-\d\d) (\d)/,'$1T$2'));return isNaN(t)?null:t};
+const K={name:['name','vessel','vessel_name','ship','ship_name'],imo:['imo'],type:['type','ship_type','vessel_type','vessel_type_specific'],flag:['flag','flag_country'],from:['from','origin','origin_port','departure_port','last_port','previous_port','port_from','dep_port'],to:['to','destination','destination_port','arrival_port','next_port','port_to','arr_port','dest'],dep:['departed','departure','dep','atd','departure_time','departure_time_utc','atd_utc','time_departed'],arr:['arrived','arrival','arr','ata','eta','arrival_time','arrival_time_utc','eta_utc','time_arrived'],status:['status','nav_status']};
+const pick=(o,ks)=>{for(const k of ks)if(o[k]!=null&&o[k]!=='')return o[k]};
+const key=k=>String(k).trim().toLowerCase().replace(/[^a-z0-9]+/g,'_');
+function csv(t){const rows=[];let r=[],f='',q=0;
+for(let i=0;i<t.length;i++){const c=t[i];
+if(q){if(c=='"'){if(t[i+1]=='"'){f+='"';i++}else q=0}else f+=c}
+else if(c=='"')q=1;else if(c==','||c=='\t'){r.push(f);f=''}
+else if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;r.push(f);f='';if(r.some(x=>x!==''))rows.push(r);r=[]}else f+=c}
+r.push(f);if(r.some(x=>x!==''))rows.push(r);
+const h=rows.shift().map(key);
+return rows.map(a=>Object.fromEntries(h.map((k,i)=>[k,(a[i]||'').trim()])))}
+function norm(rows){const out=[];let skip=0;
+for(const r of rows){const o={};for(const k in r)o[key(k)]=r[k];const g={};for(const f in K)g[f]=pick(o,K[f]);
+const from=find(OM,g.from),to=find(AE,g.to),type=cat(g.type);
+if(!from||!to||!type||!g.name){skip++;continue}
+out.push({name:String(g.name),imo:g.imo||'',type,flag:g.flag||'',from,to,dep:pd(g.dep),arr:pd(g.arr),status:g.status||''})}
+return{out,skip}}
+function status(v,n){const s=String(v.status||'').toLowerCase();
+if(s){if(/arriv|moored|berth/.test(s))return'Arrived';if(/sched|expect|plan/.test(s))return'Scheduled';if(/under|way|sail|transit/.test(s))return'Underway'}
+if(v.dep&&v.dep>n)return'Scheduled';if(v.arr&&v.arr<=n)return'Arrived';return'Underway'}
+function sample(){const n=Date.now();return[
+['Demo Falcon','Container','Marshall Islands','Sohar','Jebel Ali',-9,17],['Demo Oryx','Tanker','Liberia','Sohar','Fujairah',-2,5],
+['Demo Pearl','Bulk','Panama','Salalah','Khalifa Port',-41,80],['Demo Dolphin','Gas','Singapore','Sur','Fujairah',-6,16],
+['Demo Horizon','Container','Liberia','Salalah','Jebel Ali',-30,74],['Demo Sandpiper','General cargo','Oman','Khasab','Sharjah',-3,9],
+['Demo Crescent','Ro-Ro','Bahamas','Sohar','Abu Dhabi',-12,26],['Demo Mirage','Tanker','Malta','Duqm','Fujairah',-20,50],
+['Demo Gazelle','Container','Panama','Sohar','Khor Fakkan',-30,6],['Demo Saffron','Bulk','Marshall Islands','Duqm','Jebel Ali',-90,60],
+['Demo Kestrel','Tanker','Liberia','Muscat','Fujairah',-26,16],['Demo Marlin','General cargo','UAE','Shinas','Ras Al Khaimah',-14,8],
+['Demo Amber','Container','Singapore','Sohar','Dubai',-50,18],['Demo Coral','Container','Singapore','Salalah','Jebel Ali',6,76],
+['Demo Anchor','Tanker','Marshall Islands','Sohar','Fujairah',3,5],['Demo Zephyr','Ro-Ro','Panama','Sohar','Khalifa Port',14,24],
+['Demo Basil','General cargo','Oman','Khasab','Dubai',20,11],['Demo Lotus','Gas','Liberia','Sur','Jebel Ali',28,36],
+['Demo Willow','Bulk','Malta','Muscat','Jebel Ali',9,26]
+].map(([name,type,flag,from,to,d,u])=>({name,imo:'',type,flag,from,to,dep:n+d*H,arr:n+(d+u)*H,sample:1}))}
+const rel=(t,n)=>{if(!t)return'time n/a';const d=t-n,m=Math.round(Math.abs(d)/6e4);if(m<2)return'now';const s=m<90?m+' min':m<2880?Math.round(m/60)+' h':Math.round(m/1440)+' d';return d<0?s+' ago':'in '+s};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(DATA))}catch(e){}};
+const load=()=>{try{const s=localStorage.getItem(KEY);const d=s&&JSON.parse(s);return Array.isArray(d)&&d.length?d:null}catch(e){return null}};
+let DATA=load()||sample(),LIVE=0,UPD=0;
+const ST={f:'',t:'',q:'',s:'All',ty:new Set()};
+function fill(el,label,ps,val,k){if(val&&!ps.includes(val))ST[k]=val='';el.innerHTML='<option value="">'+label+'</option>'+ps.map(p=>'<option'+(p==val?' selected':'')+'>'+p+'</option>').join('')}
+function render(){
+const n=Date.now(),isS=DATA[0]&&DATA[0].sample;
+DATA.forEach(v=>v.st=status(v,n));
+$('src').className='note'+(isS?'':' ok');
+$('src').textContent=LIVE?'Live AIS feed, refreshed '+rel(UPD,n)+'. '+DATA.length+' Oman to UAE voyages detected so far.'+(DATA.length?'':' Ships appear once they are seen leaving an Omani port, so give it a few hours.'):isS?'Sample data: these vessels are fictional. Open “Import real voyage data” below to see actual voyages.':'Your imported data: '+DATA.length+' Oman to UAE voyages.';
+$('sub').textContent='Commercial vessels leaving Oman for the UAE. Updated '+new Date(n).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'.';
+const ports=(k,L)=>L.map(x=>x[1]).filter(p=>DATA.some(v=>v[k]==p));
+const fo=ports('from',OM),to=ports('to',AE);
+fill($('fs'),'From: any Omani port',fo,ST.f,'f');fill($('ts'),'To: any UAE port',to,ST.t,'t');
+const q=ST.q.toLowerCase(),sOK=v=>ST.s=='All'||v.st==ST.s;
+const base=DATA.filter(v=>(!ST.ty.size||ST.ty.has(v.type))&&(!q||(v.name+' '+v.imo).toLowerCase().includes(q)));
+const lane=base.filter(v=>(!ST.f||v.from==ST.f)&&(!ST.t||v.to==ST.t));
+const list=lane.filter(sOK);
+$('tabs').innerHTML=['All','Underway','Scheduled','Arrived'].map(s=>'<button data-s="'+s+'" class="'+(ST.s==s?'on':'')+'">'+s+' '+(s=='All'?lane.length:lane.filter(v=>v.st==s).length)+'</button>').join('');
+$('tg').innerHTML=[...new Set(DATA.map(v=>v.type))].sort().map(t=>'<button data-ty="'+esc(t)+'" class="'+(ST.ty.has(t)?'on':'')+'">'+esc(t)+'</button>').join('');
+const bs=base.filter(sOK);
+$('mx').innerHTML='<tr><th></th>'+to.map(p=>'<th>'+p+'</th>').join('')+'</tr>'+fo.map(f=>'<tr><th>'+f+'</th>'+to.map(t=>{const c=bs.filter(v=>v.from==f&&v.to==t).length;return'<td class="c'+(c?' has':'')+(ST.f==f&&ST.t==t?' on':'')+'" data-f="'+f+'" data-t="'+t+'">'+(c||'·')+'</td>'}).join('')+'</tr>').join('');
+const o={Underway:0,Scheduled:1,Arrived:2},big=1e15;
+list.sort((a,b)=>o[a.st]-o[b.st]||(a.st=='Arrived'?(b.arr||0)-(a.arr||0):a.st=='Underway'?(a.arr||big)-(b.arr||big):(a.dep||big)-(b.dep||big)));
+$('lh').textContent=list.length+(list.length==1?' voyage':' voyages');
+$('list').innerHTML=list.length?list.map(v=>{
+const p=Math.round(100*(v.st=='Arrived'?1:v.st=='Scheduled'?0:v.dep&&v.arr&&v.arr>v.dep?Math.max(.04,Math.min(.96,(n-v.dep)/(v.arr-v.dep))):.5));
+const meta=[v.type,v.flag,v.imo?'IMO '+v.imo:''].filter(Boolean).map(esc).join(', ');
+return'<div class="v"><div class="r1"><b>'+esc(v.name)+'</b><span class="st '+v.st+'">'+v.st+'</span></div><div class="meta">'+meta+'</div>'
++'<div class="lane"><span>'+v.from+'</span><span class="ln '+v.st+'"><u style="width:'+p+'%"></u><i style="left:'+p+'%"></i></span><span>'+v.to+'</span></div>'
++'<div class="times"><span>'+(v.st=='Scheduled'?'Departs ':'Departed ')+rel(v.dep,n)+'</span><span>'+(v.st=='Arrived'?'Arrived ':v.st=='Scheduled'?'Arrives ':'ETA ')+rel(v.arr,n)+'</span></div></div>'}).join('')
+:'<div class="empty">No voyages match these filters.<br><br><button class="btn g" data-clear="1">Clear filters</button></div>'}
+function msg(t,err){const m=$('msg');m.textContent=t;m.className=err?'err':''}
+function ingest(txt){try{txt=String(txt).trim();let rows=(txt[0]=='['||txt[0]=='{')?JSON.parse(txt):csv(txt);
+if(!Array.isArray(rows))rows=rows.voyages||rows.data||[rows];
+const{out,skip}=norm(rows);
+if(!out.length){msg('No commercial Oman to UAE voyages found ('+skip+' rows skipped). Check the from and to columns.',1);return}
+DATA=out;save();Object.assign(ST,{f:'',t:'',s:'All'});ST.ty.clear();
+msg('Loaded '+out.length+' voyages. '+skip+' rows skipped (not Oman to UAE, or not commercial).');render()}
+catch(e){msg('Could not read that data: '+e.message,1)}}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-s],[data-ty],[data-clear],td.c');if(!b)return;const d=b.dataset;
+if(d.s)ST.s=d.s;
+else if(d.ty){ST.ty.has(d.ty)?ST.ty.delete(d.ty):ST.ty.add(d.ty)}
+else if(d.clear){Object.assign(ST,{f:'',t:'',q:'',s:'All'});ST.ty.clear();$('q').value=''}
+else{const on=ST.f==d.f&&ST.t==d.t;ST.f=on?'':d.f;ST.t=on?'':d.t}
+render()});
+$('fs').onchange=e=>{ST.f=e.target.value;render()};
+$('ts').onchange=e=>{ST.t=e.target.value;render()};
+$('q').oninput=e=>{ST.q=e.target.value;render()};
+$('file').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(ingest).catch(()=>msg('Could not read that file.',1))};
+$('load').onclick=()=>$('paste').value.trim()?ingest($('paste').value):msg('Paste data or choose a file first.',1);
+$('reset').onclick=()=>{DATA=sample();try{localStorage.removeItem(KEY)}catch(e){}msg('Back to sample data.');render()};
+async function live(){try{const r=await fetch('voyages.json?'+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();DATA=norm(j.voyages||[]).out;LIVE=1;UPD=j.updated||0;render()}catch(e){}}
+render();live();setInterval(render,6e4);setInterval(live,3e5);
+})();
+</script>
+</body>
+</html>
