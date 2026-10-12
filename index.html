@@ -66,6 +66,7 @@ textarea{width:100%;min-height:90px;margin:8px 0;padding:9px;border:1px solid va
 <h1>Oman to UAE ships</h1>
 <p class="sub" id="sub"></p>
 <div class="note" id="src"></div>
+<p class="hint" id="dg"></p>
 <div class="row"><select id="fs" aria-label="Origin port in Oman"></select><select id="ts" aria-label="Destination port in the UAE"></select></div>
 <div class="row"><input type="search" id="q" placeholder="Search vessel name or IMO"></div>
 <div class="tabs" id="tabs"></div>
@@ -130,7 +131,7 @@ function sample(){const n=Date.now();return[
 const rel=(t,n)=>{if(!t)return'time n/a';const d=t-n,m=Math.round(Math.abs(d)/6e4);if(m<2)return'now';const s=m<90?m+' min':m<2880?Math.round(m/60)+' h':Math.round(m/1440)+' d';return d<0?s+' ago':'in '+s};
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(DATA))}catch(e){}};
 const load=()=>{try{const s=localStorage.getItem(KEY);const d=s&&JSON.parse(s);return Array.isArray(d)&&d.length?d:null}catch(e){return null}};
-let DATA=load()||sample(),LIVE=0,UPD=0;
+let DATA=load()||sample(),LIVE=0,UPD=0,STATS=null;
 const ST={f:'',t:'',q:'',s:'All',ty:new Set()};
 function fill(el,label,ps,val,k){if(val&&!ps.includes(val))ST[k]=val='';el.innerHTML='<option value="">'+label+'</option>'+ps.map(p=>'<option'+(p==val?' selected':'')+'>'+p+'</option>').join('')}
 function render(){
@@ -138,6 +139,7 @@ const n=Date.now(),isS=DATA[0]&&DATA[0].sample;
 DATA.forEach(v=>v.st=status(v,n));
 $('src').className='note'+(isS?'':' ok');
 $('src').textContent=LIVE?'Live AIS feed, refreshed '+rel(UPD,n)+'. '+DATA.length+' Oman to UAE voyages detected so far.'+(DATA.length?'':' Ships appear once they are seen leaving an Omani port, so give it a few hours.'):isS?'Sample data: these vessels are fictional. Open “Import real voyage data” below to see actual voyages.':'Your imported data: '+DATA.length+' Oman to UAE voyages.';
+$('dg').textContent=LIVE&&STATS?diag(STATS):'';
 $('sub').textContent='Commercial vessels leaving Oman for the UAE. Updated '+new Date(n).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'.';
 const ports=(k,L)=>L.map(x=>x[1]).filter(p=>DATA.some(v=>v[k]==p));
 const fo=ports('from',OM),to=ports('to',AE);
@@ -160,6 +162,7 @@ return'<div class="v"><div class="r1"><b>'+esc(v.name)+'</b><span class="st '+v.
 +'<div class="lane"><span>'+v.from+'</span><span class="ln '+v.st+'"><u style="width:'+p+'%"></u><i style="left:'+p+'%"></i></span><span>'+v.to+'</span></div>'
 +'<div class="times"><span>'+(v.st=='Scheduled'?'Departs ':'Departed ')+rel(v.dep,n)+'</span><span>'+(v.st=='Arrived'?'Arrived ':v.st=='Scheduled'?'Arrives ':'ETA ')+rel(v.arr,n)+'</span></div></div>'}).join('')
 :'<div class="empty">No voyages match these filters.<br><br><button class="btn g" data-clear="1">Clear filters</button></div>'}
+function diag(s){const f=x=>(x||0).toLocaleString();let t='Last check: '+f(s.msgs)+' AIS messages from '+f(s.ships)+' ships. Seen in Omani ports in the last 5 days: '+f(s.om)+' ('+f(s.left)+' since departed).';if(!s.msgs)t+=' Nothing was received, so check the run log in GitHub Actions.';else if(!s.om)t+=' No ships have been seen in Omani port areas yet.';return t}
 function msg(t,err){const m=$('msg');m.textContent=t;m.className=err?'err':''}
 function ingest(txt){try{txt=String(txt).trim();let rows=(txt[0]=='['||txt[0]=='{')?JSON.parse(txt):csv(txt);
 if(!Array.isArray(rows))rows=rows.voyages||rows.data||[rows];
@@ -180,7 +183,7 @@ $('q').oninput=e=>{ST.q=e.target.value;render()};
 $('file').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(ingest).catch(()=>msg('Could not read that file.',1))};
 $('load').onclick=()=>$('paste').value.trim()?ingest($('paste').value):msg('Paste data or choose a file first.',1);
 $('reset').onclick=()=>{DATA=sample();try{localStorage.removeItem(KEY)}catch(e){}msg('Back to sample data.');render()};
-async function live(){try{const r=await fetch('voyages.json?'+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();DATA=norm(j.voyages||[]).out;LIVE=1;UPD=j.updated||0;render()}catch(e){}}
+async function live(){try{const r=await fetch('voyages.json?'+Date.now(),{cache:'no-store'});if(!r.ok)return;const j=await r.json();DATA=norm(j.voyages||[]).out;LIVE=1;UPD=j.updated||0;STATS=j.stats||null;render()}catch(e){}}
 render();live();setInterval(render,6e4);setInterval(live,3e5);
 })();
 </script>
