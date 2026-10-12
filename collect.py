@@ -10,6 +10,7 @@ import asyncio, calendar, json, math, os, re, time
 LISTEN = int(os.environ.get("LISTEN_SECONDS", "100"))
 MAXAGE = 5 * 86400                      # forget an Oman departure after 5 days
 BOX = [[[15.0, 51.5], [27.5, 60.5]]]    # [lat, lon] corners: Salalah to Hormuz
+RUN = {"msgs": 0, "heard": set()}       # this run's counters, shown on the page
 
 # country, port, lat, lon, radius km. Approximate: adjust to taste.
 PORTS = [
@@ -105,7 +106,10 @@ def handle(S, m, now):
         return
     if m.get("MessageType") == "ShipStaticData":
         d = body.get("ShipStaticData") or {}
-        if kind(d.get("Type")) is None:          # fishing, tug, yacht, naval...
+        t = d.get("Type")
+        if not t:                                # type not given yet: wait for the next broadcast
+            return
+        if kind(t) is None:          # fishing, tug, yacht, naval...
             S["skip"].add(mmsi)
             for k in ("static", "om", "open"):
                 S[k].pop(mmsi, None)
@@ -134,7 +138,7 @@ def handle(S, m, now):
 
 async def listen(S):
     import websockets
-    n, end = 0, time.time() + LISTEN
+    end = time.time() + LISTEN
     async with websockets.connect("wss://stream.aisstream.io/v0/stream") as ws:
         await ws.send(json.dumps({"APIKey": os.environ["AISSTREAM_API_KEY"], "BoundingBoxes": BOX,
                                   "FilterMessageTypes": ["PositionReport", "ShipStaticData"]}))
@@ -143,9 +147,12 @@ async def listen(S):
                 raw = await asyncio.wait_for(ws.recv(), max(1, end - time.time()))
             except asyncio.TimeoutError:
                 break
-            handle(S, json.loads(raw), time.time())
-            n += 1
-    return n
+            m = json.loads(raw)
+            RUN["msgs"] += 1
+            mm = (m.get("MetaData") or {}).get("MMSI")
+            if mm:
+                RUN["heard"].add(mm)
+            handle(S, m, time.time())
 
 
 def finalize(S, now):
@@ -179,21 +186,24 @@ def export(S, now):
         if v.get("type") and v.get("to"):
             out.append(dict(v, dep=int(v["dep"] * 1000), arr=int(v["arr"] * 1000) if v.get("arr") else None))
     out.sort(key=lambda v: v["dep"], reverse=True)
+    stats = {"msgs": RUN["msgs"], "ships": len(RUN["heard"]), "om": len(S["om"]),
+             "left": sum(1 for e in S["om"].values() if e[2])}
     with open("voyages.json", "w") as f:
-        json.dump({"updated": int(now * 1000), "voyages": out}, f)
+        json.dump({"updated": int(now * 1000), "stats": stats, "voyages": out}, f)
     return len(out)
 
 
 def main():
-    S, n = load(), 0
+    S = load()
     try:
-        n = asyncio.run(listen(S))
+        asyncio.run(listen(S))
     except Exception as e:                       # feed hiccup: keep going with saved state
         print("Feed problem, using saved state:", repr(e))
     now = time.time()
     finalize(S, now)
     save(S)
-    print("messages:", n, "| voyages:", export(S, now))
+    v = export(S, now)
+    print("messages:", RUN["msgs"], "| ships:", len(RUN["heard"]), "| in Omani ports:", len(S["om"]), "| voyages:", v)
 
 
 if __name__ == "__main__":
